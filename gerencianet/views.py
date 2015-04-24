@@ -11,8 +11,9 @@ def get_payment_link_view(request, *args, **kwargs):
         code = request.POST.get('code')
         email = request.POST.get('email')
         plan = GatewayPlan(code, 1990, u'Plano Básico', 1, False, 100)
-        gateway_payment = get_payment_link(email, plan)
-        return HttpResponse(gateway_payment.link)
+        identifier = 'myIdentifier'
+        gateway_payment = get_payment_link(email, plan, identifier=identifier)
+        return HttpResponse(gateway_payment)
 
     return HttpResponse('Unack')
 

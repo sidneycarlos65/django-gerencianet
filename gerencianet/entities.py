@@ -4,12 +4,13 @@
 
 class GatewayPayment(object):
 
-    def __init__(self, transaction, link):
+    def __init__(self, identifier, transaction, link):
+        self.identifier = identifier
         self.transaction = transaction
         self.link = link
 
     def __repr__(self):
-        return str(self.transaction) + ' - ' + str(self.link)
+        return self.identifier + '-' + str(self.transaction) + ' - ' + str(self.link)
 
 
 class GatewayPlan(object):
@@ -39,8 +40,10 @@ class GatewayTransactionHistory(object):
 
 class GatewayInformation(object):
 
-    def __init__(self, history=None):
+    def __init__(self, transaction, identifier, history=None):
+        self.transaction = transaction
+        self.identifier = identifier
         self.history = history
 
     def __repr__(self):
-        return str(self.history)
+        return str(self.identifier) + '-' + str(self.transaction) + '-' + str(self.history)

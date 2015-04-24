@@ -10,12 +10,15 @@ from gerencianet.repository import insert_log
 from gerencianet.services import do_gateway_post
 
 
-def get_payment_link(email, plan):
+def get_payment_link(email, plan, identifier=None):
     timestamp = datetime.now().microsecond
-    identifier = '{0};{1};{2}'.format(email, plan.code, timestamp)
+
+    if identifier is None:
+        identifier = '{0};{1};{2}'.format(email, plan.code, timestamp)
 
     items = list()
-    items.append(dict(itemValor=plan.value, itemDescricao=plan.description))
+    value = int(("%.2f" % plan.value).replace('.', ''))
+    items.append(dict(itemValor=value, itemDescricao=plan.description))
 
     data = dict(
         itens=items, periodicidade=plan.periodicity, client=dict(email=email),
@@ -35,7 +38,7 @@ def get_payment_link(email, plan):
     transaction = gateway_response['resposta']['transacao']
     link = gateway_response['resposta']['link']
 
-    return GatewayPayment(transaction, link)
+    return GatewayPayment(identifier, transaction, link)
 
 
 def get_notification_info(notification):
@@ -46,6 +49,9 @@ def get_notification_info(notification):
 
     gateway_response = do_gateway_post(url, post_data, post_headers)
 
+    identifier = gateway_response['resposta']['identificador']
+    transaction = gateway_response['resposta']['transacao']
+
     history = list()
     for h in gateway_response['resposta']['historico']:
         action = h['acao']
@@ -53,7 +59,7 @@ def get_notification_info(notification):
         status_h = h['status']
         history.append(GatewayTransactionHistory(action, date, status_h))
 
-    information = GatewayInformation(history)
+    information = GatewayInformation(transaction, identifier, history)
     insert_log(notification)
 
     return information

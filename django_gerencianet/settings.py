@@ -45,6 +45,7 @@ GERENCIANET_NOTIFICATION_INFO_URL = 'https://go.gerencianet.com.br/api/notificac
 GERENCIANET_REDIRECT_URL = 'http://localhost:8000/'
 GERENCIANET_RECURRENT_PAYMENT_URL = 'https://go.gerencianet.com.br/teste/api/assinatura/json'
 GERENCIANET_PAYMENT_URL = 'https://go.gerencianet.com.br/teste/api/pagamento/json'
+# GERENCIANET_PAYMENT_URL = 'https://go.gerencianet.com.br/api/pagamento/json'
 GERENCIANET_TOKEN = 'token_de_integracao'
 
 try:
