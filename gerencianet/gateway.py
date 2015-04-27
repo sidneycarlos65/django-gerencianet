@@ -21,7 +21,7 @@ def get_payment_link(email, plan, identifier=None):
     items.append(dict(itemValor=value, itemDescricao=plan.description))
 
     data = dict(
-        itens=items, periodicidade=plan.periodicity, client=dict(email=email),
+        itens=items, periodicidade=plan.periodicity, cliente=dict(email=email),
         retorno=dict(urlNotificacao=settings.GERENCIANET_NOTIFICATION_URL,
                      url=settings.GERENCIANET_REDIRECT_URL,
                      identificador=identifier),
@@ -49,14 +49,14 @@ def get_notification_info(notification):
 
     gateway_response = do_gateway_post(url, post_data, post_headers)
 
-    identifier = gateway_response['resposta']['identificador']
-    transaction = gateway_response['resposta']['transacao']
+    identifier = gateway_response['resposta'].get('identificador')
+    transaction = gateway_response['resposta'].get('transacao')
 
     history = list()
     for h in gateway_response['resposta']['historico']:
         action = h['acao']
         date = h['data']
-        status_h = h['status']
+        status_h = h['codigoStatus']
         history.append(GatewayTransactionHistory(action, date, status_h))
 
     information = GatewayInformation(transaction, identifier, history)
