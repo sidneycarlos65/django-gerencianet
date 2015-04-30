@@ -10,7 +10,7 @@ from gerencianet.repository import insert_log
 from gerencianet.services import do_gateway_post
 
 
-def get_payment_link(email, plan, identifier=None):
+def get_payment_link(email, plan, identifier=None, redirect_url=settings.GERENCIANET_REDIRECT_URL):
     timestamp = datetime.now().microsecond
 
     if identifier is None:
@@ -23,8 +23,7 @@ def get_payment_link(email, plan, identifier=None):
     data = dict(
         itens=items, periodicidade=plan.periodicity, cliente=dict(email=email),
         retorno=dict(urlNotificacao=settings.GERENCIANET_NOTIFICATION_URL,
-                     url=settings.GERENCIANET_REDIRECT_URL,
-                     identificador=identifier),
+                     url=redirect_url, identificador=identifier),
     )
 
     url_payment = settings.GERENCIANET_PAYMENT_URL
