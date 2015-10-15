@@ -35,7 +35,7 @@ class GatewayTransactionHistory(object):
         self.status = status
 
     def __repr__(self):
-        return str(self.action) + ' - ' + str(self.date) + ' - ' + str(self.status)
+        return self.action.encode("utf-8") + ' - ' + str(self.date) + ' - ' + str(self.status)
 
 
 class GatewayInformation(object):
