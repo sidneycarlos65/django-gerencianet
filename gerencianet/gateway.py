@@ -6,7 +6,8 @@ from django.conf import settings
 import simplejson
 
 from gerencianet.entities import GatewayInformation, GatewayPayment, GatewayTransactionHistory
-from gerencianet.repository import insert_log
+from gerencianet.exceptions import GatewayGerenciaNetError
+from gerencianet.repository import insert_success_log, insert_error_log
 from gerencianet.services import do_gateway_post
 
 
@@ -46,7 +47,13 @@ def get_notification_info(notification):
     post_data = dict(token=settings.GERENCIANET_TOKEN, dados=data)
     url = settings.GERENCIANET_NOTIFICATION_INFO_URL
 
-    gateway_response = do_gateway_post(url, post_data, post_headers)
+    try:
+        gateway_response = do_gateway_post(url, post_data, post_headers)
+        insert_success_log(notification, None, gateway_response)
+
+    except GatewayGerenciaNetError as gge:
+        insert_error_log(notification, None, gge.message)
+        raise gge
 
     identifier = gateway_response['resposta'].get('identificador')
     transaction = gateway_response['resposta'].get('transacao')
@@ -58,7 +65,4 @@ def get_notification_info(notification):
         status_h = h['codigoStatus']
         history.append(GatewayTransactionHistory(action, date, status_h))
 
-    information = GatewayInformation(transaction, identifier, history)
-    insert_log(notification)
-
-    return information
+    return GatewayInformation(transaction, identifier, history)
