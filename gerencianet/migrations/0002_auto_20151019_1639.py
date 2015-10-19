@@ -18,12 +18,17 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='paymentlog',
+            name='identifier',
+            field=models.TextField(null=True, blank=True),
+        ),
+        migrations.AddField(
+            model_name='paymentlog',
             name='response',
             field=jsonfield.fields.JSONField(null=True),
         ),
         migrations.AddField(
             model_name='paymentlog',
             name='status',
-            field=models.IntegerField(default=1, choices=[(1, b'Success'), (2, b'Error')]),
+            field=models.IntegerField(default=2, choices=[(2, b'Success'), (1, b'Error')]),
         ),
     ]

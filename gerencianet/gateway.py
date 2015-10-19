@@ -49,20 +49,22 @@ def get_notification_info(notification):
 
     try:
         gateway_response = do_gateway_post(url, post_data, post_headers)
-        insert_success_log(notification, None, gateway_response)
+        insert_success_log(notification, None, gateway_response, gateway_response['resposta'].get('identificador'))
+
+        identifier = gateway_response['resposta'].get('identificador')
+        transaction = gateway_response['resposta'].get('transacao')
+
+        history = list()
+        for h in gateway_response['resposta']['historico']:
+            action = h['acao']
+            date = h['data']
+            status_h = h['codigoStatus']
+            history.append(GatewayTransactionHistory(action, date, status_h))
+
+        return GatewayInformation(transaction, identifier, history)
 
     except GatewayGerenciaNetError as gge:
-        insert_error_log(notification, None, gge.message)
-        raise gge
+        insert_error_log(notification, None, {"message": gge.message}, None)
+        return None
 
-    identifier = gateway_response['resposta'].get('identificador')
-    transaction = gateway_response['resposta'].get('transacao')
 
-    history = list()
-    for h in gateway_response['resposta']['historico']:
-        action = h['acao']
-        date = h['data']
-        status_h = h['codigoStatus']
-        history.append(GatewayTransactionHistory(action, date, status_h))
-
-    return GatewayInformation(transaction, identifier, history)

@@ -17,6 +17,7 @@ class PaymentLog(Model):
     timestamp = DateTimeField(auto_now=True)
     data = TextField()
     status = IntegerField(default=GatewayStatusResponse.success, choices=STATUS_CHOICES)
+    identifier = TextField(null=True, blank=True)
     email = EmailField(null=True)
     response = JSONField(null=True)
 
