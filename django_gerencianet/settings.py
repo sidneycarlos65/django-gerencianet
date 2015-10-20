@@ -48,6 +48,8 @@ GERENCIANET_PAYMENT_URL = 'https://go.gerencianet.com.br/teste/api/pagamento/jso
 # GERENCIANET_PAYMENT_URL = 'https://go.gerencianet.com.br/api/pagamento/json'
 GERENCIANET_TOKEN = 'token_de_integracao'
 
+ADMIN_ADD_BUTTOM = False
+
 try:
     from local_settings import *
 except ImportError:
