@@ -1,6 +1,6 @@
 Django==2.2.28
 argparse==1.2.1
-requests==2.20.0
+requests==2.31.0
 simplejson==3.6.5
 jsonfield==1.0.3
 wsgiref==0.1.2
