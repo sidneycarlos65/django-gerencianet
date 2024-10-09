@@ -1,4 +1,4 @@
-Django==3.2.24
+Django==4.2.16
 argparse==1.2.1
 requests==2.32.0
 simplejson==3.6.5
